@@ -71,6 +71,9 @@ bool CMainDlg::InitParams(CString& sysPath, CString& serviceName, CString& displ
 		return false;
 	}
 	serviceName = _tcsrchr(sysPath, L'\\') + 1;
+	if (serviceName.Right(4).CompareNoCase(L".sys") == 0) {
+		serviceName.Delete(serviceName.GetLength() - 4, 4);
+	}
 	displayName = serviceName;
 
 	UINT bst = IsDlgButtonChecked(IDC_DRIVER_TYPE);

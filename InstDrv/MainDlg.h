@@ -42,7 +42,7 @@ public:
 	LRESULT OnStop(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/);
 	LRESULT OnRun(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/);
 
-	bool InitParams(CString& sysPath, CString& serviceName, CString& displayName, bool isFileSys);
+	bool InitParams(CString& sysPath, CString& serviceName, CString& displayName, bool& isFileSys);
 	void ShowError();
 	DWORD StopService();
 	DWORD RunService();

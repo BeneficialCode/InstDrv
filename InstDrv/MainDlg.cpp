@@ -64,7 +64,8 @@ LRESULT CMainDlg::OnBrowse(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/,
 	return 0;
 }
 
-bool CMainDlg::InitParams(CString& sysPath, CString& serviceName, CString& displayName, bool isFileSys) {
+bool CMainDlg::InitParams(CString& sysPath, CString& serviceName, CString& displayName, 
+	bool& isFileSys) {
 	GetDlgItemText(IDC_EDIT_DRVFILEPATH, sysPath);
 	if (sysPath.IsEmpty()) {
 		SetDlgItemText(IDC_EDIT_STATUS, L"请注意，文件路径为空！");
@@ -140,7 +141,7 @@ LRESULT CMainDlg::OnInstall(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/
 
 LRESULT CMainDlg::OnRemove(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/) {
 	CString sysPath, serviceName, displayName;
-	bool isFileSys;
+	bool isFileSys = false;
 	bool success = InitParams(sysPath, serviceName, displayName, isFileSys);
 	if (!success)
 		return FALSE;
@@ -181,10 +182,25 @@ LRESULT CMainDlg::OnStop(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, B
 
 DWORD CMainDlg::RunService() {
 	CString sysPath, serviceName, displayName;
-	bool isFileSys;
+	bool isFileSys = false;
 	bool success = InitParams(sysPath, serviceName, displayName, isFileSys);
 	if (!success)
 		return FALSE;
+	bool bypassRevokeCheck = false;
+	UINT bst = IsDlgButtonChecked(IDC_BYPASS_REVOKE);
+	switch (bst)
+	{
+		case BST_UNCHECKED:
+			bypassRevokeCheck = false;
+			break;
+
+		case BST_CHECKED:
+			bypassRevokeCheck = true;
+			break;
+	}
+	if (bypassRevokeCheck) {
+		MessageBox(L"Not implementation yet!", L"Info", MB_OK);
+	}
 	SysManager SysMgr(sysPath, serviceName, displayName, isFileSys);
 	success = SysMgr.Run();
 	if (!success) {
